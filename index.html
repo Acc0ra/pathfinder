@@ -1127,10 +1127,12 @@ function feedModal(){
 /* ============ VISION MODE — simulated perfect-data future ============ */
 let MODE = "today";
 const VQUERIES = [
+  {id:"vpulse", chip:"Show me the whole business, right now", kw:["whole business","everything","company","pulse","all accounts","right now"]},
   {id:"vforecast", chip:"Predict Hertfordshire's next quarter", kw:["predict","forecast","next quarter","will order","future"]},
   {id:"vcompete", chip:"How exposed are we to competitors here?", kw:["compet","opera","drive","renray","exposed","threat","tender"]},
+  {id:"vnpd", chip:"What should we build next?", kw:["build next","product development","npd","innovation","design","roadmap"]},
+  {id:"vsim", chip:"Simulate: seating on stock, nationwide", kw:["simulate","simulation","what if","scenario","nationwide","rollout"]},
   {id:"vagent", chip:"Run this morning's account briefing", kw:["briefing","morning","agent","daily","actions"]},
-  {id:"overview", chip:"Give me the full picture on Hertfordshire", kw:["full picture","overview","picture"]},
 ];
 const VTHEATRE = {
   vforecast: [
@@ -1150,6 +1152,24 @@ const VTHEATRE = {
     ["Drafting actions","4 prepared · 2 auto-executed"],
     ["Scoring sentiment safety","All clear"],
     ["Assembling your briefing","28 seconds of reading"]
+  ],
+  vpulse: [
+    ["Opening the unified warehouse","866 accounts · live"],
+    ["Computing company pulse","Revenue, sentiment, service, pipeline"],
+    ["Running anomaly detection","14 flags this week · 3 today"],
+    ["Ranking movers","Rising and falling accounts identified"]
+  ],
+  vnpd: [
+    ["Aggregating demand signals","Complaints, callouts, enquiries, webinar Q&A"],
+    ["Scanning competitor catalogues","4 competitors · gap analysis"],
+    ["Scoring innovation candidates","Demand x feasibility x margin"],
+    ["Writing the roadmap the market asked for","5 candidates ranked"]
+  ],
+  vsim: [
+    ["Loading the stock-conversion model","Calibrated on 12 council accounts"],
+    ["Simulating nationwide rollout","3 scenarios · 24-month horizon"],
+    ["Stress-testing capacity","Assessors, delivery, service load"],
+    ["Computing payback","Ready"]
   ]
 };
 function toggleMode(){
@@ -1250,6 +1270,111 @@ VIEWS.vagent = function(text){ return `
   </div>
   <div class="footer-cta">
     <button class="fbtn" onclick="toggleMode()">← Back to today's real data — see the gap</button>
+  </div>`; };
+
+
+/* ---------- VISION VIEW 4: company pulse / command centre ---------- */
+VIEWS.vpulse = function(text){ return `
+  ${vbanner()}
+  ${metaRow(text,['ns','hs','zm','cg'])}
+  <div class="bigline">866 accounts. Four systems. <em>One heartbeat.</em></div>
+  <div class="grid">
+    <div class="card c12"><div class="stat-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr">
+      <div class="stat"><div class="lbl">Revenue YTD · Company</div><div class="val">£4.21M</div><div class="delta up">▲ 9% vs plan</div></div>
+      <div class="stat"><div class="lbl">Live Sentiment Index</div><div class="val">8.3<small>/10</small></div><div class="delta up">▲ 0.2 this month</div></div>
+      <div class="stat"><div class="lbl">Open Pipeline</div><div class="val">£1.9M</div><div class="delta warn">⚠ £410K aging >60 days</div></div>
+      <div class="stat"><div class="lbl">Anomalies This Week</div><div class="val">14</div><div class="delta warn">⚠ 3 flagged today</div></div>
+      <div class="stat"><div class="lbl">Agent Actions Overnight</div><div class="val">312</div><div class="delta up">▲ 41 awaiting approval</div></div>
+    </div></div>
+    <div class="card c12"><h3><span class="k"></span>Pathfinder Insight · The Business, Right Now</h3>
+      <div class="narr">The company is <b>9% ahead of plan</b>, carried by community beds and a webinar cohort that is converting at twice historic rates. Three things need eyes today: a <b>callout cluster, six actuator faults in 48 hours, all from one November batch</b> <span class="cite ns" title="Anomaly detection">ANOMALY · QUALITY</span>; an <b>order gap opening at a top-20 Midlands account</b>, same signature Hertfordshire showed in February; and a <b>competitor mention spike</b> across three council accounts in the North West. None of these was reported by a person. All three were caught overnight.</div>
+    </div>
+    <div class="card c6"><h3><span class="k"></span>Rising · This Month</h3>
+      ${[["County Council ICES — Midlands","Webinar cohort converting · +34%","+£46K"],["NHS Trust — South West","Presto adopted on stock · first council","+£38K"],["Care Group — 34 homes","Assessment blitz completed · 11 orders","+£29K"]].map(r=>`
+        <div class="threat"><div class="tl2"><div class="tn">${r[0]}</div><div class="ts">${r[1]}</div></div><span class="tbadge lo">${r[2]}</span></div>`).join('')}
+    </div>
+    <div class="card c6"><h3><span class="k"></span>Needs Attention · Today</h3>
+      ${[["Quality: actuator batch NOV-24-B","6 faults · 48 hours · recall assessment drafted","hi"],["NHS Trust — Midlands","5-week order gap · the Hertfordshire signature","md"],["North West cluster","Opera mentions in 3 accounts · same fortnight","md"]].map(r=>`
+        <div class="threat"><div class="tl2"><div class="tn">${r[0]}</div><div class="ts">${r[1]}</div></div><span class="tbadge ${r[2]}">${r[2]==="hi"?"ACT NOW":"WATCH"}</span></div>`).join('')}
+    </div>
+  </div>
+  <div class="footer-cta">
+    <button class="fbtn" onclick="run('vnpd','What should we build next?')">The market is also telling us what to build →</button>
+  </div>`; };
+
+/* ---------- VISION VIEW 5: NPD brain ---------- */
+VIEWS.vnpd = function(text){ return `
+  ${vbanner()}
+  ${metaRow(text,['ns','zm','cg'])}
+  <div class="bigline">The roadmap isn't a debate. <em>It's already written in the data.</em></div>
+  <div class="grid">
+    <div class="card c12"><h3><span class="k"></span>Pathfinder Insight · Voice-of-Market Synthesis</h3>
+      <div class="narr">Every complaint, callout, enquiry and webinar question is a design vote. Counted across all sources, the market's number one request is unambiguous: <b>a quieter riser mechanism</b>, backed by 601 noise-fault callouts, 8 complaints and a competitor gap, <b>no one on the market has solved it</b> <span class="cite ns" title="Service records">SERVICE + COMPETITOR SCAN</span>. Second: extend the FloorBed height range, the single most-asked prescriber question of the year. Third, and fastest to ship: <b>a bariatric Presto variant</b>, where demand from moving-and-handling teams meets a category with no low-cost competitor at all.</div>
+    </div>
+    <div class="card c7"><h3><span class="k"></span>Innovation Candidates · Ranked by Demand Signal</h3>
+      ${[["01","Quieter riser mechanism","601 callouts · 8 complaints · competitor gap: OPEN","94"],["02","Extended FloorBed height range","64 prescriber asks · hoist compatibility driver","87"],["03","Bariatric Presto variant","23 M&H requests · no low-cost competitor exists","79"],["04","Washable fabric programme","IPC demand across 11 councils · margin accretive","63"],["05","Integrated fall-detection sensor","18 falls-prevention asks · partnership candidate","58"]].map(r=>`
+        <div class="faq-item"><div class="rank">${r[0]}</div>
+        <div class="fq"><div class="q">${r[1]}</div><div class="m">${r[2]}</div></div>
+        <div class="n-asked" style="color:var(--amber)">${r[3]}<span style="font-size:8px;color:var(--dim)">/100</span></div></div>`).join('')}
+      <div class="zoomhint">SCORE: DEMAND x FEASIBILITY x MARGIN · SIMULATED</div>
+    </div>
+    <div class="card c5"><h3><span class="k"></span>Competitor Gap Map</h3>
+      ${[["Quiet riser tech","NO ONE HAS IT","lo"],["Low-cost bariatric bed","NO ONE HAS IT","lo"],["Extended height range","OPERA PARTIAL","md"],["Fall sensors","2 STARTUPS ONLY","md"]].map(r=>`
+        <div class="threat"><div class="tl2"><div class="tn">${r[0]}</div></div><span class="tbadge ${r[2]}">${r[1]}</span></div>`).join('')}
+      <div style="height:14px"></div>
+      <div class="narr" style="font-size:13px;line-height:1.7">Two of the market's top three requests are gaps <b>no competitor fills</b>. In a functioning intelligence loop, that's not a coincidence, it's a queue.</div>
+    </div>
+  </div>
+  <div class="footer-cta">
+    <button class="fbtn" onclick="run('vsim','Simulate: seating on stock, nationwide')">Now price the biggest commercial lever →</button>
+  </div>`; };
+
+/* ---------- VISION VIEW 6: what-if simulator ---------- */
+const SIMS = {
+  cons: {label:"CONSERVATIVE", councils:"8 of 34", uplift:"+£0.9M", upliftpct:34, assessors:"+1 assessor", payback:"11 months", callouts:"+6%", conf:"92%"},
+  exp:  {label:"EXPECTED",     councils:"15 of 34", uplift:"+£1.7M", upliftpct:63, assessors:"+2 assessors", payback:"8 months", callouts:"+11%", conf:"81%"},
+  aggr: {label:"AGGRESSIVE",   councils:"23 of 34", uplift:"+£2.7M", upliftpct:100, assessors:"+4 assessors · 1 region split", payback:"6 months", callouts:"+19%", conf:"64%"}
+};
+let simKey = "exp";
+function simSet(k){
+  simKey = k;
+  const d = SIMS[k];
+  document.querySelectorAll(".simbtn").forEach(b=>b.classList.toggle("on", b.dataset.k===k));
+  document.getElementById("sim-uplift").textContent = d.uplift;
+  document.getElementById("sim-councils").textContent = d.councils;
+  document.getElementById("sim-assessors").textContent = d.assessors;
+  document.getElementById("sim-payback").textContent = d.payback;
+  document.getElementById("sim-callouts").textContent = d.callouts;
+  document.getElementById("sim-conf").textContent = d.conf + " CONFIDENCE";
+  document.getElementById("sim-bar").style.width = d.upliftpct + "%";
+}
+VIEWS.vsim = function(text){ const d = SIMS[simKey]; return `
+  ${vbanner()}
+  ${metaRow(text,['ns','hs'])}
+  <div class="bigline">Seating on stock, everywhere it should be. <em>Priced in eight seconds.</em></div>
+  <div class="grid">
+    <div class="card c12"><h3><span class="k"></span>Scenario Simulator · Nationwide Stock Conversion · 24-Month Horizon</h3>
+      <div class="filterbar" style="margin-bottom:20px">
+        ${Object.keys(SIMS).map(k=>`<span class="fpill simbtn ${k===simKey?"on":""}" data-k="${k}" onclick="simSet('${k}')">${SIMS[k].label}</span>`).join('')}
+      </div>
+      <div class="stat-row" style="grid-template-columns:1.4fr 1fr 1fr 1fr 1fr">
+        <div class="stat"><div class="lbl">Annualised revenue uplift</div><div class="val" style="font-size:40px;color:var(--amber)" id="sim-uplift">${d.uplift}</div><div class="delta warn" id="sim-conf">${d.conf} CONFIDENCE</div></div>
+        <div class="stat"><div class="lbl">Councils converted</div><div class="val" id="sim-councils">${d.councils}</div></div>
+        <div class="stat"><div class="lbl">Capacity required</div><div class="val" style="font-size:20px" id="sim-assessors">${d.assessors}</div></div>
+        <div class="stat"><div class="lbl">Service load</div><div class="val" id="sim-callouts">${d.callouts}</div></div>
+        <div class="stat"><div class="lbl">Payback</div><div class="val" id="sim-payback">${d.payback}</div></div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="mrow"><div class="ml">Uplift vs max case</div><div class="track"><div class="mf" id="sim-bar" style="width:${d.upliftpct}%;background:linear-gradient(90deg,var(--amber),#ffd98a)"></div></div><div class="mv" style="color:var(--amber)">24M</div></div>
+      <div class="zoomhint">MODEL CALIBRATED ON 12 COUNCIL CONVERSIONS · CAPACITY CONSTRAINTS FROM ASSESSMENT + CALLOUT HISTORY · SIMULATED</div>
+    </div>
+    <div class="card c12"><h3><span class="k"></span>What the Model Accounts For</h3>
+      <div class="narr">Not just revenue. The simulation prices <b>assessor capacity</b> (Dean and Tino run at 74% utilisation today), <b>delivery load by region</b>, the <b>service tail</b> every new stock category creates, and <b>cannibalisation of special orders</b>. This is the difference between a spreadsheet guess and a business that can interrogate itself: every assumption traces to a real operational dataset, and the board can change any of them live.</div>
+    </div>
+  </div>
+  <div class="footer-cta">
+    <button class="fbtn" onclick="run('vpulse','Show me the whole business, right now')">← Back to the command centre</button>
+    <button class="fbtn" onclick="toggleMode()">Exit vision · see today's real data</button>
   </div>`; };
 
 /* ============ post-render effects ============ */
