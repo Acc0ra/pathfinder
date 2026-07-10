@@ -452,6 +452,49 @@ h1.hero em{
 .mrow .mv{width:70px;flex:none;text-align:right;font-family:var(--mono);font-size:11px;color:var(--mint)}
 .bigbars{display:flex;align-items:flex-end;gap:14px;height:190px;padding:10px 0 0}
 
+
+/* ---------- vision mode ---------- */
+.modeswitch{
+  display:flex;align-items:center;gap:0;border:1px solid var(--line-2);border-radius:100px;
+  background:rgba(12,35,29,0.6);padding:3px;cursor:pointer;user-select:none;
+}
+.modeswitch .mopt{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;padding:7px 14px;border-radius:100px;
+  color:var(--dim);transition:all .2s;white-space:nowrap;
+}
+.modeswitch .mopt.on{color:#0a1f1a;background:linear-gradient(135deg,var(--mint),#7df0cf);font-weight:600}
+body.vision .modeswitch .mopt.on{background:linear-gradient(135deg,var(--amber),#ffd98a)}
+.vbanner{
+  display:flex;align-items:center;gap:10px;justify-content:center;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--amber);
+  padding:8px 14px;margin:0 0 16px;border:1px dashed rgba(245,184,76,0.4);border-radius:10px;
+  background:rgba(245,184,76,0.06);
+}
+.vbanner .vdot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:vpulse 1.6s ease-in-out infinite}
+@keyframes vpulse{0%,100%{opacity:1}50%{opacity:.3}}
+body.vision .chip{border-color:rgba(245,184,76,0.3)}
+body.vision .chip:hover{border-color:rgba(245,184,76,0.6);background:rgba(245,184,76,0.08);box-shadow:0 8px 26px rgba(245,184,76,0.15)}
+body.vision .eyebrow{color:var(--amber)}
+.threat{display:flex;align-items:center;gap:14px;padding:13px 16px;border:1px solid var(--line);border-radius:12px;margin-bottom:11px;background:rgba(8,26,21,0.45)}
+.threat .tl2{flex:1}
+.threat .tn{font-size:14px;font-weight:500}
+.threat .ts{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px;letter-spacing:.06em}
+.tbadge{flex:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;padding:5px 11px;border-radius:6px}
+.tbadge.hi{color:var(--coral);border:1px solid rgba(255,122,107,0.4);background:rgba(255,122,107,0.08)}
+.tbadge.md{color:var(--amber);border:1px solid rgba(245,184,76,0.4);background:rgba(245,184,76,0.08)}
+.tbadge.lo{color:var(--mint);border:1px solid rgba(53,227,180,0.35);background:var(--mint-soft)}
+.agentitem{display:flex;gap:14px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:13px;margin-bottom:11px;background:rgba(8,26,21,0.45)}
+.astat{flex:none;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;padding:4px 9px;border-radius:5px;margin-top:2px}
+.astat.done{color:var(--mint);border:1px solid rgba(53,227,180,0.35);background:var(--mint-soft)}
+.astat.wait{color:var(--amber);border:1px solid rgba(245,184,76,0.4);background:rgba(245,184,76,0.08)}
+.astat.hum{color:#7fafd0;border:1px solid rgba(127,175,208,0.4);background:rgba(127,175,208,0.08)}
+.conf{font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.06em}
+.fcast-row{display:flex;align-items:center;gap:12px;margin-bottom:13px}
+.fcast-row .fl2{width:130px;flex:none;font-size:12.5px;color:var(--muted)}
+.fcast-row .track{flex:1;height:9px;border-radius:100px;background:rgba(255,255,255,0.05);overflow:hidden;position:relative}
+.fcast-row .fillf{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--amber),#ffd98a)}
+.fcast-row .fv{width:110px;flex:none;text-align:right;font-family:var(--mono);font-size:11px;color:var(--amber)}
+
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }
@@ -483,11 +526,17 @@ h1.hero em{
       </div>
     </div>
     <div class="sources">
-      <div class="src-pill"><span class="dot"></span>NetSuite</div>
-      <div class="src-pill"><span class="dot"></span>HubSpot</div>
-      <div class="src-pill"><span class="dot"></span>Zoom</div>
-      <div class="src-pill"><span class="dot"></span>Cognito</div>
-      <div class="sync-note">synced 4 min ago</div>
+      <div id="srcpills" style="display:flex;gap:8px;align-items:center">
+        <div class="src-pill"><span class="dot"></span>NetSuite</div>
+        <div class="src-pill"><span class="dot"></span>HubSpot</div>
+        <div class="src-pill"><span class="dot"></span>Zoom</div>
+        <div class="src-pill"><span class="dot"></span>Cognito</div>
+        <div class="sync-note">synced 4 min ago</div>
+      </div>
+      <div class="modeswitch" onclick="toggleMode()" title="Switch data mode" style="margin-left:14px">
+        <span class="mopt" id="mo-today">TODAY · REAL DATA</span>
+        <span class="mopt" id="mo-vision">VISION · PERFECT DATA</span>
+      </div>
     </div>
   </div>
 
@@ -717,12 +766,7 @@ sizeCanvas(); initNodes(); tick();
 addEventListener('resize',()=>{sizeCanvas();initNodes();if(reduced)tick();});
 
 /* ============ landing chips ============ */
-const chipsEl = document.getElementById('chips');
-QUERIES.forEach(q=>{
-  const c=document.createElement('div');c.className='chip';c.textContent=q.chip;
-  c.onclick=()=>typeAndRun(q.chip,q.id);
-  chipsEl.appendChild(c);
-});
+/* chips rendered at end of script once mode logic is defined */
 
 function typeAndRun(text,id){
   const inp=document.getElementById('q');
@@ -738,7 +782,7 @@ function typeAndRun(text,id){
 function matchQuery(text){
   const t=text.toLowerCase();
   let best=null,score=0;
-  for(const q of QUERIES){
+  for(const q of activeQueries()){
     let s=q.kw.reduce((a,k)=>a+(t.includes(k)?1:0),0);
     if(s>score){score=s;best=q.id;}
   }
@@ -767,7 +811,7 @@ function run(id,text){
   const th=document.getElementById('theatre'), cnv=document.getElementById('canvas');
   cnv.classList.remove('on'); cnv.innerHTML=''; th.innerHTML='';
   scrollTo(0,0);
-  const lines=THEATRE[id]||THEATRE.fallback;
+  const lines=(MODE==='vision'&&VTHEATRE[id])||THEATRE[id]||THEATRE.fallback;
   lines.forEach((l,i)=>{
     const el=document.createElement('div');el.className='tline';
     el.innerHTML=`<span class="spin"></span>
@@ -1079,6 +1123,135 @@ function feedModal(){
   `);
 }
 
+
+/* ============ VISION MODE — simulated perfect-data future ============ */
+let MODE = "today";
+const VQUERIES = [
+  {id:"vforecast", chip:"Predict Hertfordshire's next quarter", kw:["predict","forecast","next quarter","will order","future"]},
+  {id:"vcompete", chip:"How exposed are we to competitors here?", kw:["compet","opera","drive","renray","exposed","threat","tender"]},
+  {id:"vagent", chip:"Run this morning's account briefing", kw:["briefing","morning","agent","daily","actions"]},
+  {id:"overview", chip:"Give me the full picture on Hertfordshire", kw:["full picture","overview","picture"]},
+];
+const VTHEATRE = {
+  vforecast: [
+    ["Querying unified warehouse","214 sources · 6 years of history"],
+    ["Running demand model","Per-SKU · per-care-setting"],
+    ["Simulating stock-conversion scenarios","3 futures modelled"],
+    ["Calibrating confidence intervals","Backtested on 8 quarters"]
+  ],
+  vcompete: [
+    ["Scanning call & email transcripts","2 competitor mentions found"],
+    ["Reading tender & framework registers","1 live countdown"],
+    ["Estimating share of wallet","Category-level model"],
+    ["Compiling win/loss history","Comparable councils · 24 months"]
+  ],
+  vagent: [
+    ["Reviewing overnight activity","11 signals processed"],
+    ["Drafting actions","4 prepared · 2 auto-executed"],
+    ["Scoring sentiment safety","All clear"],
+    ["Assembling your briefing","28 seconds of reading"]
+  ]
+};
+function toggleMode(){
+  MODE = MODE === "today" ? "vision" : "today";
+  document.body.classList.toggle("vision", MODE==="vision");
+  document.getElementById("mo-today").classList.toggle("on", MODE==="today");
+  document.getElementById("mo-vision").classList.toggle("on", MODE==="vision");
+  renderChips();
+  goHome();
+}
+function activeQueries(){ return MODE==="vision" ? VQUERIES : QUERIES; }
+function renderChips(){
+  const el=document.getElementById('chips'); el.innerHTML='';
+  activeQueries().forEach(q=>{
+    const c=document.createElement('div');c.className='chip';c.textContent=q.chip;
+    c.onclick=()=>typeAndRun(q.chip,q.id);
+    el.appendChild(c);
+  });
+  document.querySelector('.foot-hint').textContent = MODE==="vision"
+    ? "VISION MODE · UNIFIED WAREHOUSE · 214 SOURCES · SIMULATED"
+    : "CONNECTED TO 4 SYSTEMS · 14,300+ RECORDS · LIVE";
+}
+function vbanner(){
+  return `<div class="vbanner"><span class="vdot"></span>VISION MODE · SIMULATED DATA · ILLUSTRATES CAPABILITY ONCE THE DATA FOUNDATION IS BUILT</div>`;
+}
+
+/* ---------- VISION VIEW 1: forecast ---------- */
+VIEWS.vforecast = function(text){ return `
+  ${vbanner()}
+  ${metaRow(text,['ns','hs','zm','cg'])}
+  <div class="grid">
+    <div class="card c12"><h3><span class="k"></span>Pathfinder Forecast · Q3 2026</h3>
+      <div class="narr">Hertfordshire will order <b>£164K ± £19K in Q3</b> <span class="cite ns" title="Demand model">MODEL · 8-QTR BACKTEST</span>, led by CommunityBed replenishment across the loan store network. Reorder rhythm says <b>siderail straps deplete around week 34</b>, actuator spares around week 36. Three of the five open Advance assessments convert this quarter at current rates <span class="cite ns" title="Assessment conversion model">CONVERSION MODEL · 74%</span>. And if seating goes on stock before the framework review, the model adds <b>£212K of annualised revenue</b> at 81% confidence, the single largest lever available in this account.</div>
+    </div>
+    <div class="card c7"><h3><span class="k"></span>Predicted Orders · Q3 · By Category</h3>
+      ${[["CommunityBed",68,"£68K","92% CONF"],["FloorBed",44,"£44K","88% CONF"],["Seating (special)",26,"£26K","76% CONF"],["Pressure care",14,"£14K","81% CONF"],["Parts & consumables",12,"£12K","95% CONF"]].map(r=>`
+        <div class="fcast-row"><div class="fl2">${r[0]}</div><div class="track"><div class="fillf" style="width:${r[1]}%"></div></div><div class="fv">${r[2]} · <span class="conf">${r[3]}</span></div></div>`).join('')}
+      <div class="zoomhint">MODEL: 6-YEAR ORDER HISTORY x CARE-SETTING GROWTH x SEASONALITY · SIMULATED</div>
+    </div>
+    <div class="card c5"><h3><span class="k"></span>Depletion Radar</h3>
+      ${[["Siderail pull straps","WK 34","40 units · reorder due","md"],["Actuator spares","WK 36","Callout-linked demand","md"],["FloorBed mattresses","WK 41","Comfortable","lo"]].map(r=>`
+        <div class="threat"><div class="tl2"><div class="tn">${r[0]}</div><div class="ts">${r[2]}</div></div><span class="tbadge ${r[3]}">${r[1]}</span></div>`).join('')}
+      <h3 style="margin-top:20px"><span class="k"></span>Stock-Conversion Simulation</h3>
+      <div class="stat"><div class="lbl">Seating on stock · modelled uplift</div><div class="val" style="font-size:34px;color:var(--amber)">+£212K<small>/yr</small></div><div class="delta warn">81% confidence · pre-framework window closing</div></div>
+    </div>
+  </div>
+  <div class="footer-cta">
+    <button class="fbtn" onclick="run('vcompete','How exposed are we to competitors here?')">Who else wants this account? →</button>
+  </div>`; };
+
+/* ---------- VISION VIEW 2: competitive exposure ---------- */
+VIEWS.vcompete = function(text){ return `
+  ${vbanner()}
+  ${metaRow(text,['ns','hs'])}
+  <div class="bigline">Beds are safe. <em>Seating is contested.</em> And the clock is running.</div>
+  <div class="grid">
+    <div class="card c12"><h3><span class="k"></span>Pathfinder Insight · Competitive Position</h3>
+      <div class="narr">Accora holds an estimated <b>38% share of wallet</b> at Hertfordshire, anchored by bed-category stock status. But <b>Opera was mentioned in two call transcripts in the last 30 days</b> <span class="cite hs" title="Transcript scan">TRANSCRIPT SCAN · SIMULATED</span>, both times about seating, and Opera has won <b>two of the last three comparable council frameworks</b> where seating went to tender un-stocked. The framework review is <b>87 days out</b>. Every signal says the same thing: our weakest category commercially is our strongest clinically, and someone else has noticed.</div>
+    </div>
+    <div class="card c5"><h3><span class="k"></span>Share of Wallet · Estimated</h3>
+      ${[["Accora",38],["Opera",27],["Drive DeVilbiss",19],["Renray",9],["Other",7]].map((r,i)=>`
+        <div class="hbar-row"><div class="hl">${r[0]}</div><div class="track"><div class="fillh" style="background:${i===0?'linear-gradient(90deg,var(--brand),var(--mint))':'linear-gradient(90deg,#3d5a52,#5d7c74)'}" data-w="${r[1]*2.2}"></div></div><div class="pv">${r[1]}%</div></div>`).join('')}
+      <div class="zoomhint">MODEL: ICES CATALOGUE SCAN x ORDER SHARE · SIMULATED</div>
+    </div>
+    <div class="card c7"><h3><span class="k"></span>Threat Radar · By Category</h3>
+      ${[["Seating","Opera pushing · special-only status · 2 transcript mentions","HIGH","hi"],["Pressure care","Drive incumbent in 3 of 11 localities","MED","md"],["Community beds","Presto price point defends the low end","LOW","lo"],["FloorBed","Stock incumbency + clinical moat","LOW","lo"]].map(r=>`
+        <div class="threat"><div class="tl2"><div class="tn">${r[0]}</div><div class="ts">${r[1]}</div></div><span class="tbadge ${r[3]}">${r[2]}</span></div>`).join('')}
+      <div class="threat" style="border-color:rgba(245,184,76,0.4)"><div class="tl2"><div class="tn">Tender radar</div><div class="ts">Framework review · Q4 2026 · Opera won 2 of last 3 comparable councils</div></div><span class="tbadge md">87 DAYS</span></div>
+    </div>
+  </div>
+  <div class="footer-cta">
+    <button class="fbtn" onclick="run('vagent','Run this morning\\'s account briefing')">So what's Pathfinder doing about it? →</button>
+  </div>`; };
+
+/* ---------- VISION VIEW 3: autonomous briefing ---------- */
+VIEWS.vagent = function(text){ return `
+  ${vbanner()}
+  ${metaRow(text,['ns','hs','zm','cg'])}
+  <div class="bigline">While you slept, Pathfinder <em>did the first hour of everyone's day.</em></div>
+  <div class="grid">
+    <div class="card c12"><h3><span class="k"></span>Morning Briefing · Hertfordshire · 28-Second Read</h3>
+      <div class="narr">Overnight: <b>11 signals processed, 4 actions prepared, 2 already executed</b>. Sentiment across the account is stable at 8.1. One thing needs a human decision today: the pre-framework engagement plan is drafted and the window is narrowing. Everything else below is a single click.</div>
+    </div>
+    <div class="card c12"><h3><span class="k"></span>Overnight Actions</h3>
+      ${[
+        ["done","EXECUTED","Booked follow-up call with Julia Raine for Thursday 10:00","Her complaint closed 17 Jun · sentiment-safe window confirmed · calendar invite accepted"],
+        ["done","EXECUTED","Published FloorBed height-range resource to the 3 OTs who asked","Drafted from IFU §4.2 · clinical team pre-approved template · 2 already opened it"],
+        ["wait","AWAITING APPROVAL","Re-engagement email drafted for 37 dormant OT contacts","Segmented by webinar topic interest · tone-checked against house style · one click to send"],
+        ["wait","AWAITING APPROVAL","Pre-framework partnership proposal · full draft","Stock-conversion case with 52-assessment evidence pack · routed to account owner + MD"],
+        ["hum","NEEDS HUMAN","Opera mentioned twice in yesterday's calls — recommend account director review","Transcript excerpts attached · suggested counter-positioning included"]
+      ].map(a=>`<div class="agentitem"><span class="astat ${a[0]}">${a[1]}</span>
+        <div class="body" style="flex:1"><div class="ti" style="font-size:14px;font-weight:500">${a[2]}</div><div class="de" style="font-size:12.5px;color:var(--muted);font-weight:300;margin-top:4px;line-height:1.6">${a[3]}</div></div>
+        <div class="ops" style="flex:none;display:flex;gap:8px">${a[0]==="wait"?'<button class="opbtn agent">Approve</button><button class="opbtn">Edit</button>':a[0]==="hum"?'<button class="opbtn agent">Review</button>':'<button class="opbtn">View</button>'}</div></div>`).join('')}
+    </div>
+    <div class="card c12"><h3><span class="k"></span>And Across Every Account</h3>
+      <div class="narr">This briefing exists for <b>all 866 accounts, every morning</b>. Account managers stop retrieving and start deciding. The first hour of the day, returned to the whole commercial team, at once.</div>
+    </div>
+  </div>
+  <div class="footer-cta">
+    <button class="fbtn" onclick="toggleMode()">← Back to today's real data — see the gap</button>
+  </div>`; };
+
 /* ============ post-render effects ============ */
 function afterRender(id){
   // grow bars
@@ -1114,7 +1287,10 @@ function afterRender(id){
   }
   next();
 }
+
+/* ---------- init ---------- */
+renderChips();
+document.getElementById('mo-today').classList.add('on');
 </script>
 </body>
 </html>
-
