@@ -379,6 +379,79 @@ h1.hero em{
 }
 .demo-note p{color:var(--muted);font-weight:300;font-size:14.5px;line-height:1.75;margin-bottom:22px}
 
+
+/* ---------- modal / zoom ---------- */
+#ovl{position:fixed;inset:0;z-index:50;display:none;background:rgba(4,12,10,0.78);backdrop-filter:blur(8px)}
+#ovl.on{display:flex;align-items:center;justify-content:center;animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.modal{
+  width:min(880px,94vw);max-height:88vh;overflow-y:auto;
+  background:linear-gradient(180deg,rgba(17,48,40,0.92),rgba(9,26,21,0.96));
+  border:1px solid rgba(53,227,180,0.28);border-radius:22px;padding:30px;
+  box-shadow:0 40px 120px rgba(0,0,0,0.6), 0 0 140px rgba(0,136,113,0.25);
+  animation:pop .25s cubic-bezier(.2,.9,.3,1.2);
+}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal h2{font-size:19px;font-weight:600;letter-spacing:.01em;margin-bottom:4px}
+.modal .msub{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.12em;margin-bottom:22px}
+.mclose{
+  position:sticky;top:0;float:right;cursor:pointer;width:34px;height:34px;border-radius:10px;
+  border:1px solid var(--line-2);background:rgba(12,35,29,0.8);color:var(--muted);
+  display:grid;place-items:center;transition:all .2s;margin-left:12px;
+}
+.mclose:hover{color:var(--mint);border-color:rgba(53,227,180,0.5)}
+.expand-ic{
+  position:absolute;top:18px;right:18px;cursor:pointer;width:28px;height:28px;border-radius:8px;
+  border:1px solid var(--line);background:rgba(8,26,21,0.6);color:var(--dim);
+  display:grid;place-items:center;transition:all .2s;z-index:2;
+}
+.expand-ic:hover{color:var(--mint);border-color:rgba(53,227,180,0.5);transform:scale(1.08)}
+.bar.clickable{cursor:pointer}
+.bar.clickable:hover .fill{filter:brightness(1.35);box-shadow:0 0 22px rgba(53,227,180,0.4)}
+.bar.sel .fill{outline:2px solid var(--mint);outline-offset:2px}
+.hbar-row.clickable{cursor:pointer;border-radius:8px;padding:3px 6px;margin-left:-6px;transition:background .15s}
+.hbar-row.clickable:hover{background:rgba(53,227,180,0.07)}
+.stat.clickable{cursor:pointer;border-radius:10px;padding:4px 8px;margin:-4px -8px;transition:background .15s}
+.stat.clickable:hover{background:rgba(53,227,180,0.07)}
+.zoomhint{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;margin-top:10px}
+
+/* ---------- activity feed ---------- */
+.filterbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.fpill{
+  cursor:pointer;user-select:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  padding:6px 12px;border-radius:100px;border:1px solid var(--line);color:var(--muted);
+  background:rgba(8,26,21,0.5);transition:all .15s;
+}
+.fpill:hover{color:var(--text)}
+.fpill.on{color:var(--mint);border-color:rgba(53,227,180,0.5);background:var(--mint-soft)}
+.feed{max-height:430px;overflow-y:auto;padding-right:8px;scrollbar-width:thin;scrollbar-color:rgba(53,227,180,0.25) transparent}
+.feed.tall{max-height:62vh}
+.fitem{display:flex;gap:13px;padding:12px 0;border-bottom:1px solid rgba(53,227,180,0.06)}
+.fitem:last-child{border-bottom:none}
+.fava{
+  flex:none;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  border:1px solid var(--line-2);
+}
+.fava.mkt{color:var(--amber);border-color:rgba(245,184,76,0.35);background:rgba(245,184,76,0.08)}
+.fava.fin{color:var(--mint);border-color:rgba(53,227,180,0.35);background:var(--mint-soft)}
+.fava.sent{color:#7df0cf;border-color:rgba(125,240,207,0.35);background:rgba(125,240,207,0.07)}
+.fava.svc{color:var(--coral);border-color:rgba(255,122,107,0.35);background:rgba(255,122,107,0.08)}
+.fava.clin{color:#7fafd0;border-color:rgba(127,175,208,0.4);background:rgba(127,175,208,0.08)}
+.fbody{flex:1;min-width:0}
+.fbody .ft{font-size:13px;font-weight:300;color:#d7e8e2;line-height:1.5}
+.fbody .ft b{font-weight:500;color:var(--text)}
+.fbody .fm{font-family:var(--mono);font-size:9.5px;color:var(--dim);margin-top:4px;letter-spacing:.05em}
+.fdate{flex:none;text-align:right}
+.fdate .d{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em}
+.fdate .s{font-family:var(--mono);font-size:8.5px;color:var(--dim);margin-top:3px;letter-spacing:.04em}
+.mrow{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+.mrow .ml{width:150px;flex:none;font-size:12.5px;color:var(--muted)}
+.mrow .track{flex:1;height:10px;border-radius:100px;background:rgba(255,255,255,0.05);overflow:hidden}
+.mrow .mf{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--brand),var(--mint))}
+.mrow .mv{width:70px;flex:none;text-align:right;font-family:var(--mono);font-size:11px;color:var(--mint)}
+.bigbars{display:flex;align-items:flex-end;gap:14px;height:190px;padding:10px 0 0}
+
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }
@@ -395,6 +468,8 @@ h1.hero em{
 <body>
 
 <canvas id="field"></canvas>
+
+<div id="ovl" onclick="if(event.target===this)closeModal()"><div class="modal" id="modalbox"></div></div>
 
 <div class="shell">
   <div class="topbar">
@@ -471,11 +546,11 @@ const DATA = {
     {m:"Jan",v:53},{m:"Feb",v:16,flag:true},{m:"Mar",v:100},{m:"Apr",v:77},{m:"May",v:58},{m:"Jun",v:97}
   ],
   productMix: [
-    {n:"FloorBed", p:45},
-    {n:"Seating (Configura)", p:24},
-    {n:"CommunityBed", p:21},
-    {n:"Pressure care", p:7},
-    {n:"Parts & other", p:3}
+    {n:"FloorBed", p:45, f:"FloorBed"},
+    {n:"Seating (Configura)", p:24, f:"Seating"},
+    {n:"CommunityBed", p:21, f:"CommunityBed"},
+    {n:"Pressure care", p:7, f:"Pressure care"},
+    {n:"Parts & other", p:3, f:"Parts & other"}
   ],
   relationships: [
     {n:"OT & therapy leads", p:50, c:145},
@@ -758,7 +833,7 @@ const VIEWS={
         </div>
         <div class="stat"><div class="lbl">H1 Revenue</div><div class="val">£272.8K</div><div class="delta up">▲ Q2 +37% vs Q1</div></div>
         <div class="stat"><div class="lbl">Open Pipeline</div><div class="val">£226.9K</div><div class="delta warn">⚠ 95 quotes awaiting action</div></div>
-        <div class="stat"><div class="lbl">NPS · 2026</div><div class="val">+95</div><div class="delta up">▲ 19 of 20 promoters</div></div>
+        <div class="stat clickable" onclick="npsModal()"><div class="lbl">NPS · 2026 ⤢</div><div class="val">+95</div><div class="delta up">▲ 19 of 20 promoters</div></div>
         <div class="stat"><div class="lbl">Known Contacts</div><div class="val">288</div><div class="delta warn">⚠ 202 never contacted</div></div>
       </div></div>
 
@@ -766,21 +841,24 @@ const VIEWS={
         <div class="narr" id="narr" data-narr="narrOverview"></div>
       </div>
 
-      <div class="card c7"><h3><span class="k"></span>Monthly Revenue · H1 2026</h3>
+      <div class="card c7" style="position:relative"><h3><span class="k"></span>Monthly Revenue · H1 2026</h3>
+        <div class="expand-ic" onclick="monthModal('Mar')" title="Expand"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
         <div class="bars">${DATA.monthlyRevenue.map(b=>`
-          <div class="bar${b.flag?' flag':''}"><div class="fill" data-h="${b.v}"></div><div class="m">${b.m}</div></div>`).join('')}
+          <div class="bar clickable${b.flag?' flag':''}" onclick="monthModal('${b.m}')"><div class="fill" data-h="${b.v}"></div><div class="m">${b.m}</div></div>`).join('')}
         </div>
-        <div style="font-family:var(--mono);font-size:10.5px;color:var(--mint);margin-top:14px;letter-spacing:.08em">▲ MARCH BEST MONTH · JUNE A CLOSE SECOND · FEB DIP FLAGGED</div>
+        <div class="zoomhint">▲ Q2 +37% VS Q1 · CLICK ANY MONTH TO SEE WHAT WAS BOUGHT</div>
       </div>
 
       <div class="card c5"><h3><span class="k"></span>Product Mix · H1 Revenue</h3>
-        ${DATA.productMix.map(p=>`<div class="hbar-row"><div class="hl">${p.n}</div><div class="track"><div class="fillh" data-w="${p.p*2.2}"></div></div><div class="pv">${p.p}%</div></div>`).join('')}
+        ${DATA.productMix.map(p=>`<div class="hbar-row clickable" onclick="famModal('${p.f}')"><div class="hl">${p.n}</div><div class="track"><div class="fillh" data-w="${p.p*2.2}"></div></div><div class="pv">${p.p}%</div></div>`).join('')}
+        <div class="zoomhint">CLICK A CATEGORY FOR LINE-LEVEL DETAIL</div>
         <h3 style="margin-top:24px"><span class="k"></span>Relationship Map · 288 Contacts</h3>
         ${DATA.relationships.map(p=>`<div class="hbar-row"><div class="hl">${p.n}</div><div class="track"><div class="fillh" data-w="${p.p*2}"></div></div><div class="pv">${p.c}</div></div>`).join('')}
       </div>
 
-      <div class="card c6"><h3><span class="k"></span>Signal Timeline · Last 90 Days</h3>
-        <div class="tl">${DATA.timeline.map(e=>`<div class="ev ${e.cls}"><div class="pt"></div><div class="d">${e.d}</div><div class="t">${e.t}</div></div>`).join('')}</div>
+      <div class="card c6" style="position:relative"><h3><span class="k"></span>Live Activity · All Systems</h3>
+        <div class="expand-ic" onclick="feedModal()" title="Expand feed"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        <div id="feedhost">${filterBar('feedhost')}${feedHTML(feedFilter,false)}</div>
       </div>
 
       <div class="card c6"><h3><span class="k"></span>Recommended Actions</h3>
@@ -800,9 +878,10 @@ const VIEWS={
       <div class="card c12"><h3><span class="k"></span>Pathfinder Insight · Stock vs Special</h3>
         <div class="narr" id="narr" data-narr="narrWhy"></div>
       </div>
-      <div class="card c7"><h3><span class="k"></span>Revenue Momentum · H1 2026</h3>
+      <div class="card c7" style="position:relative"><h3><span class="k"></span>Revenue Momentum · H1 2026</h3>
+        <div class="expand-ic" onclick="monthModal('Mar')" title="Expand"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
         <div class="bars">${DATA.monthlyRevenue.map(b=>`
-          <div class="bar${b.flag?' flag':''}"><div class="fill" data-h="${b.v}"></div><div class="m">${b.m}</div></div>`).join('')}
+          <div class="bar clickable${b.flag?' flag':''}" onclick="monthModal('${b.m}')"><div class="fill" data-h="${b.v}"></div><div class="m">${b.m}</div></div>`).join('')}
         </div>
         <div style="font-family:var(--mono);font-size:10.5px;color:var(--mint);margin-top:14px;letter-spacing:.08em">▲ Q2 +37% VS Q1 — MOMENTUM BEFORE A SINGLE CATEGORY IS ON STOCK</div>
       </div>
@@ -904,6 +983,102 @@ const VIEWS={
     </div>`;}
 };
 
+
+/* ============ drill-down data (real, computed from source files) ============ */
+const MONTHS = {"Apr": {"rev": 52311, "invoices": 31, "units": 177, "fams": [{"n": "Seating", "v": 25088}, {"n": "FloorBed", "v": 23980}, {"n": "Pressure care", "v": 1684}, {"n": "Parts & other", "v": 1559}], "top": [{"d": "Configura Advance Chair", "rev": 17225, "qty": 7}, {"d": "FloorBed 2 Nursing Bed. Four Section Profiling", "rev": 14520, "qty": 12}, {"d": "Siderail Fabric 2000mm", "rev": 4350, "qty": 30}, {"d": "FloorBed High Safety Mat", "rev": 3870, "qty": 15}, {"d": "Configura Comfort 2 Chair", "rev": 2245, "qty": 1}]}, "Feb": {"rev": 11042, "invoices": 6, "units": 115, "fams": [{"n": "FloorBed", "v": 8662}, {"n": "Parts & other", "v": 1370}, {"n": "Pressure care", "v": 1010}], "top": [{"d": "FloorBed High Safety Mat", "rev": 3870, "qty": 15}, {"d": "FloorBed Control Box", "rev": 1690, "qty": 10}, {"d": "Head & Footboard Bumpers. Fits FB1", "rev": 1370, "qty": 5}, {"d": "FloorBed Plug / Transformer", "rev": 1240, "qty": 20}, {"d": "FloorBed Standard and Rotating Bed Lever Screw", "rev": 1150, "qty": 50}]}, "Jan": {"rev": 36167, "invoices": 15, "units": 141, "fams": [{"n": "FloorBed", "v": 26632}, {"n": "Parts & other", "v": 3870}, {"n": "Seating", "v": 3675}, {"n": "CommunityBed", "v": 1364}, {"n": "Pressure care", "v": 626}], "top": [{"d": "NSB-0-FL2-200 - Floorbed 2", "rev": 14520, "qty": 12}, {"d": "FloorBed High Safety Mat", "rev": 7740, "qty": 30}, {"d": "SAFTH-0-FL1-100 - Crash Mat", "rev": 3870, "qty": 15}, {"d": "Configura Advance Chair", "rev": 3130, "qty": 1}, {"d": "Floorbed Air Mattress Pump Holder. Fits FB2", "rev": 1275, "qty": 25}]}, "Jun": {"rev": 66118, "invoices": 19, "units": 216, "fams": [{"n": "CommunityBed", "v": 39573}, {"n": "Seating", "v": 8766}, {"n": "Pressure care", "v": 8316}, {"n": "Parts & other", "v": 6858}, {"n": "FloorBed", "v": 2605}], "top": [{"d": "CommunityBed Nursing Bed. Four Section Profili", "rev": 30825, "qty": 45}, {"d": "Configura Advance Chair", "rev": 7382, "qty": 3}, {"d": "CommunityBed Fabric Siderail Set 200cm. Fits C", "rev": 6030, "qty": 15}, {"d": "Configura Bariatric TIS Chair (CHAIR-0-CFBTIS-", "rev": 3795, "qty": 1}, {"d": "Safety Sleeve", "rev": 2790, "qty": 15}]}, "Mar": {"rev": 67993, "invoices": 19, "units": 186, "fams": [{"n": "FloorBed", "v": 39195}, {"n": "Seating", "v": 13892}, {"n": "CommunityBed", "v": 8220}, {"n": "Pressure care", "v": 5826}, {"n": "Parts & other", "v": 860}], "top": [{"d": "FloorBed 2 Nursing Bed. Four Section Profiling", "rev": 28860, "qty": 24}, {"d": "CommunityBed Nursing Bed. Four Section Profili", "rev": 8220, "qty": 12}, {"d": "FloorBed High Safety Mat", "rev": 5160, "qty": 20}, {"d": "Standard Bed Lever Assist Bar. Fits FB1", "rev": 3900, "qty": 50}, {"d": "Configura Bariatric TIS Chair (CHAIR-0-CFBTIS-", "rev": 3795, "qty": 1}]}, "May": {"rev": 39212, "invoices": 25, "units": 180, "fams": [{"n": "Seating", "v": 14968}, {"n": "FloorBed", "v": 13099}, {"n": "CommunityBed", "v": 8220}, {"n": "Pressure care", "v": 1649}, {"n": "Parts & other", "v": 1276}], "top": [{"d": "Configura Advance Chair", "rev": 9843, "qty": 4}, {"d": "CommunityBed Nursing Bed. Four Section Profili", "rev": 8220, "qty": 12}, {"d": "FloorBed High Safety Mat", "rev": 3870, "qty": 15}, {"d": "Floorbed Fabric Siderail Bracket Set for 200cm", "rev": 3810, "qty": 30}, {"d": "Configura Comfort 2 Chair", "rev": 2245, "qty": 1}]}};
+const FAMD = {"CommunityBed": {"rev": 57377, "units": 123, "lines": 13, "top": [{"d": "CommunityBed Nursing Bed. Four Section Profili", "rev": 47265, "qty": 69}, {"d": "CommunityBed Fabric Siderail Set 200cm. Fits C", "rev": 6030, "qty": 15}, {"d": "CommunityBed Standard Bed Lever", "rev": 1540, "qty": 20}, {"d": "CommunityBed High Fabric Siderail Bracket Set ", "rev": 880, "qty": 5}, {"d": "ACTMN-0-CB1-000 - CommunityBed Main Lift Actua", "rev": 805, "qty": 7}, {"d": "ACTLR-0-CB1-000 - CommunityBed Legrest Actuato", "rev": 345, "qty": 3}]}, "FloorBed": {"rev": 114173, "units": 547, "lines": 35, "top": [{"d": "FloorBed 2 Nursing Bed. Four Section Profiling", "rev": 43380, "qty": 36}, {"d": "FloorBed High Safety Mat", "rev": 24510, "qty": 95}, {"d": "NSB-0-FL2-200 - Floorbed 2", "rev": 14520, "qty": 12}, {"d": "Standard Bed Lever Assist Bar. Fits FB1", "rev": 5460, "qty": 70}, {"d": "Siderail Fabric 2000mm", "rev": 4350, "qty": 30}, {"d": "Floorbed Air Mattress Pump Holder. Fits FB2", "rev": 3875, "qty": 75}]}, "Parts & other": {"rev": 15793, "units": 94, "lines": 42, "top": [{"d": "SAFTH-0-FL1-100 - Crash Mat", "rev": 3870, "qty": 15}, {"d": "1 Person Delivery. This is a direct to client ", "rev": 3200, "qty": 22}, {"d": "Safety Sleeve", "rev": 2790, "qty": 15}, {"d": "Head & Footboard Bumpers. Fits FB1", "rev": 2502, "qty": 9}, {"d": "High Siderail Fabric 2000mm", "rev": 1477, "qty": 6}, {"d": "Siderail Bracket Set for 200cm and 220cm Sider", "rev": 790, "qty": 5}]}, "Pressure care": {"rev": 19111, "units": 49, "lines": 28, "top": [{"d": "Configura Bariatric TIS Chair (CHAIR-0-CFBTIS-", "rev": 7590, "qty": 2}, {"d": "Allevia Duo Cushion Kit", "rev": 3168, "qty": 5}, {"d": "Allevia Comfort FirmEdge Mattress 90cm. FB1", "rev": 1570, "qty": 5}, {"d": "Allevia Comfort FirmEdge Mattress Cover", "rev": 1010, "qty": 10}, {"d": "Configura Comfort  1", "rev": 908, "qty": 2}, {"d": "Configura Bariatric Cushionair Cushion & Pump", "rev": 888, "qty": 1}]}, "Seating": {"rev": 66390, "units": 202, "lines": 184, "top": [{"d": "Configura Advance Chair", "rev": 36912, "qty": 15}, {"d": "Configura Comfort 2 Chair", "rev": 4310, "qty": 2}, {"d": "Configura Comfort Mediatric Chair", "rev": 3295, "qty": 1}, {"d": "Configura Advance Chair", "rev": 3130, "qty": 1}, {"d": "Configura Comfort 2 Chair", "rev": 2245, "qty": 1}, {"d": "Configura Comfort 2 Chair", "rev": 2245, "qty": 1}]}};
+const NPSL = [{"iso": "2026-06-08", "score": 10, "contact": "10992", "comment": "customer services always super responsive"}, {"iso": "2026-05-21", "score": 9, "contact": "10992", "comment": "Quick replies and helpful with queries."}, {"iso": "2026-05-18", "score": 9, "contact": "11125", "comment": "Great service - Always been happy with the results and general support throughout - and clients are happy also"}, {"iso": "2026-05-18", "score": 10, "contact": "10992", "comment": "Chris, Nicholas and Nathan have really stood out to me, if I ever have an issue needs resolving they are quick to get back to me with useful advise and offer to drop in if unresolved and between us we usually find an ans"}, {"iso": "2026-05-14", "score": 10, "contact": "10992", "comment": "Efficient as ever"}, {"iso": "2026-05-13", "score": 10, "contact": "10992", "comment": ""}, {"iso": "2026-05-06", "score": 10, "contact": "10992", "comment": ""}, {"iso": "2026-05-06", "score": 10, "contact": "10992", "comment": ""}, {"iso": "2026-04-23", "score": 10, "contact": "10992", "comment": ""}, {"iso": "2026-04-20", "score": 8, "contact": "10992", "comment": ""}, {"iso": "2026-04-13", "score": 10, "contact": "10992", "comment": "Tino was very knowledgeable , professional and friendly towards the service user and completed a thorough assessment with the quote sent through promptly during the visit."}, {"iso": "2026-04-10", "score": 10, "contact": "10992", "comment": "Dean and Phillipa took such care and time to explain the different seating options to the client. Client uses an eye gaze to communicate and they gave client time to ask questions and feedback about trialling the seats ("}, {"iso": "2026-04-07", "score": 10, "contact": "10992", "comment": "Nothing comes to mind at present"}, {"iso": "2026-03-19", "score": 10, "contact": "10992", "comment": ""}, {"iso": "2026-02-19", "score": 10, "contact": "10992", "comment": "Mark was really helpful and had a kind and considerate manner with the people we visited.  _x000D_\nThere was a slight confusion where an assessment had been requested but a measure up was noted but we got round this."}, {"iso": "2026-02-03", "score": 10, "contact": "10992", "comment": ""}, {"iso": "2026-02-02", "score": 10, "contact": "10992", "comment": ""}, {"iso": "2026-01-29", "score": 10, "contact": "10992", "comment": "dean , very informative and good knowledge of products."}, {"iso": "2026-01-27", "score": 10, "contact": "10992", "comment": "Just great professional service as usual"}, {"iso": "2026-01-23", "score": 10, "contact": "10992", "comment": "Dean was very helpful when completing a joint visit to the patient, discussed positioning and adaptation to allow the patietn to remain comfortable. Had the added bonus of Sarah TVN at the visit who provided the patients"}];
+const FEED = [{"iso": "2026-08-06", "cat": "clin", "who": "TP", "text": "Assessment <b>confirmed</b> \u00b7 Comfort \u00b7 Tino Paphitis", "meta": "Upcoming", "src": "NetSuite"}, {"iso": "2026-08-05", "cat": "clin", "who": "AC", "text": "Assessment <b>confirmed</b> \u00b7 Comfort \u00b7 Alan Clewley", "meta": "Upcoming", "src": "NetSuite"}, {"iso": "2026-07-24", "cat": "clin", "who": "TP", "text": "Assessment <b>confirmed</b> \u00b7 Advance \u00b7 Tino Paphitis", "meta": "Upcoming \u00b7 119 assessments YTD", "src": "NetSuite"}, {"iso": "2026-07-09", "cat": "mkt", "who": "SA", "text": "Call logged with <b>Sumit Arora</b>", "meta": "Outbound \u00b7 1m 53s", "src": "HubSpot"}, {"iso": "2026-07-08", "cat": "mkt", "who": "ED", "text": "Calls logged with <b>Emma Durrant</b>, <b>Danielle Corlett</b>, <b>Jack Joyce</b> and <b>Jemma Dedman</b>", "meta": "4 conversations in one day", "src": "HubSpot"}, {"iso": "2026-07-07", "cat": "mkt", "who": "AV", "text": "Calls logged with <b>Anna Van Wyk</b>, <b>Lucy Pinfold</b> and <b>Sallie Deary</b>", "meta": "Sales engagement continuing", "src": "HubSpot"}, {"iso": "2026-07-01", "cat": "mkt", "who": "JR", "text": "Follow-up call with <b>Julia Raine</b>", "meta": "Outbound \u00b7 5m 32s \u00b7 19 days after her complaint", "src": "HubSpot \u2194 NetSuite"}, {"iso": "2026-06-29", "cat": "mkt", "who": "KH", "text": "Call logged with <b>Kelly Harris</b>", "meta": "Outbound", "src": "HubSpot"}, {"iso": "2026-06-26", "cat": "fin", "who": "\u00a3", "text": "Invoice <b>564633</b> \u00b7 \u00a38,990 \u00b7 40 units", "meta": "Siderail pull straps \u00b7 consumables reorder", "src": "NetSuite"}, {"iso": "2026-06-18", "cat": "fin", "who": "\u00a3", "text": "Invoice <b>563876</b> \u00b7 \u00a317,125 \u00b7 25 units", "meta": "CommunityBed \u00b7 2nd largest order this quarter", "src": "NetSuite"}, {"iso": "2026-06-15", "cat": "svc", "who": "GO", "text": "Complaint <b>CC10306</b> raised by <b>Gareth Owen</b>", "meta": "Comfort chair \"extremely loud noise when adjusted\"", "src": "NetSuite"}, {"iso": "2026-06-12", "cat": "mkt", "who": "JR", "text": "Two calls with <b>Julia Raine</b>", "meta": "3 days after her complaint CC10292", "src": "HubSpot \u2194 NetSuite"}, {"iso": "2026-06-11", "cat": "mkt", "who": "\u26a1", "text": "<b>Call blitz:</b> 12 conversations in one afternoon", "meta": "Amy Whitaker, Sarah Patrick, Ella DeSilva + 9 more", "src": "HubSpot"}, {"iso": "2026-06-09", "cat": "svc", "who": "JR", "text": "Complaint <b>CC10292</b> raised by <b>Julia Raine</b>", "meta": "Comfort chair \u00b7 sharp sound on raise \u00b7 resolved 17 Jun", "src": "NetSuite"}, {"iso": "2026-06-08", "cat": "sent", "who": "10", "text": "<b>NPS 10</b> \u00b7 \"customer services always super responsive\"", "meta": "Promoter \u00b7 19th of 20 this year", "src": "NetSuite"}, {"iso": "2026-06-04", "cat": "fin", "who": "\u00a3", "text": "Invoice <b>562695</b> \u00b7 \u00a315,240 \u00b7 40 units", "meta": "CommunityBed \u00b7 volume order", "src": "NetSuite"}, {"iso": "2026-06-03", "cat": "mkt", "who": "GO", "text": "Call logged with <b>Gareth Owen</b>", "meta": "12 days before his complaint \u00b7 context on record", "src": "HubSpot"}, {"iso": "2026-06-02", "cat": "svc", "who": "AJ", "text": "Complaint <b>CC10274</b> raised by <b>Andy Joyce</b>", "meta": "Issue: Allevia Duo Cushion Kit is reportedly \u201cbleeping\u201d.   Accora engineer to at", "src": "NetSuite"}, {"iso": "2026-05-21", "cat": "sent", "who": "9", "text": "<b>NPS 9</b> \u00b7 \"Quick replies and helpful with queries\"", "meta": "Promoter", "src": "NetSuite"}, {"iso": "2026-05-19", "cat": "mkt", "who": "OT", "text": "<b>6 OTs attended</b> \"Falls & Safe Landing\" webinar", "meta": "3 asked about FloorBed height range \u00b7 illustrative", "src": "Zoom"}, {"iso": "2026-05-19", "cat": "fin", "who": "\u00a3", "text": "Invoice <b>561434</b> \u00b7 \u00a38,220 \u00b7 12 units", "meta": "CommunityBed", "src": "NetSuite"}, {"iso": "2026-05-18", "cat": "sent", "who": "9", "text": "<b>NPS 9</b> \u00b7 \"Great service - Always been happy with the results and general support throughout - and cl\"", "meta": "Promoter", "src": "NetSuite"}, {"iso": "2026-05-18", "cat": "sent", "who": "10", "text": "<b>NPS 10</b> \u00b7 \"Chris, Nicholas and Nathan have really stood out to me, if I ever have an issue needs reso\"", "meta": "Promoter", "src": "NetSuite"}, {"iso": "2026-05-14", "cat": "sent", "who": "10", "text": "<b>NPS 10</b> \u00b7 \"Efficient as ever\"", "meta": "Promoter", "src": "NetSuite"}, {"iso": "2026-05-01", "cat": "mkt", "who": "PR", "text": "<b>Presto category deal opened</b>", "meta": "New community bed enters the account \u00b7 decision-maker bought in", "src": "HubSpot"}, {"iso": "2026-04-23", "cat": "svc", "who": "GO", "text": "Complaint <b>CC10167</b> raised by <b>Gareth Owen</b>", "meta": "Issue: Vinyl Large Low Comfort in situ.   Reports that it isn't reclining. Accor", "src": "NetSuite"}, {"iso": "2026-04-09", "cat": "fin", "who": "\u00a3", "text": "Invoice <b>558287</b> \u00b7 \u00a318,390 \u00b7 27 units", "meta": "FloorBed 2 \u00b7 largest Q2 order", "src": "NetSuite"}, {"iso": "2026-04-08", "cat": "mkt", "who": "\u25b2", "text": "<b>Sales engagement surge begins</b>", "meta": "51 contacts touched Apr\u2013Jun vs near-zero prior", "src": "HubSpot"}, {"iso": "2026-03-02", "cat": "fin", "who": "\u00a3", "text": "Invoice <b>555264</b> \u00b7 \u00a322,560 \u00b7 24 units", "meta": "CommunityBed \u00b7 largest order of H1", "src": "NetSuite"}, {"iso": "2026-01-20", "cat": "fin", "who": "\u00a3", "text": "Invoice <b>551545</b> \u00b7 \u00a318,390 \u00b7 27 units", "meta": "FloorBed 2 \u00b7 the year opens at volume", "src": "NetSuite"}];
+const MORDER = ["Jan","Feb","Mar","Apr","May","Jun"];
+const CATNAMES = {all:"ALL ACTIVITY",fin:"FINANCIAL",mkt:"MARKETING & SALES",sent:"FEEDBACK & SENTIMENT",clin:"CLINICAL",svc:"SERVICE"};
+let feedFilter = "all";
+
+function fmtGBP(v){ return "£"+v.toLocaleString("en-GB"); }
+function fmtDate(iso){ const d=new Date(iso); return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short"}).toUpperCase(); }
+
+/* ---------- modal plumbing ---------- */
+function openModal(html){
+  document.getElementById("modalbox").innerHTML =
+    `<div class="mclose" onclick="closeModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></div>` + html;
+  document.getElementById("ovl").classList.add("on");
+}
+function closeModal(){ document.getElementById("ovl").classList.remove("on"); }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+
+/* ---------- month drill-down ---------- */
+function monthModal(m){
+  const d = MONTHS[m]; if(!d) return;
+  const maxRev = Math.max(...MORDER.map(x=>MONTHS[x].rev));
+  const famMax = Math.max(...d.fams.map(f=>f.v));
+  openModal(`
+    <h2>${({"Jan":"January","Feb":"February","Mar":"March","Apr":"April","May":"May","Jun":"June"})[m]} 2026 · ${fmtGBP(d.rev)}</h2>
+    <div class="msub">${d.invoices} INVOICES · ${d.units} UNITS · SOURCE: NETSUITE INVOICE LINES</div>
+    <div class="bigbars">${MORDER.map(x=>`
+      <div class="bar clickable ${x===m?"sel":""}" onclick="monthModal('${x}')">
+        <div class="fill" style="height:${Math.max(4,Math.round(MONTHS[x].rev/maxRev*100))}%"></div>
+        <div class="m">${x}</div>
+      </div>`).join("")}
+    </div>
+    <div class="zoomhint">CLICK ANY MONTH TO PIVOT</div>
+    <div style="height:22px"></div>
+    <h3 style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);margin-bottom:14px">WHAT WAS BOUGHT</h3>
+    ${d.fams.map(f=>`<div class="mrow"><div class="ml">${f.n}</div><div class="track"><div class="mf" style="width:${Math.round(f.v/famMax*100)}%"></div></div><div class="mv">${fmtGBP(f.v)}</div></div>`).join("")}
+    <div style="height:20px"></div>
+    <h3 style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);margin-bottom:12px">TOP LINES</h3>
+    ${d.top.map(t=>`<div class="fitem" style="padding:9px 0"><div class="fbody"><div class="ft">${t.d}</div></div><div class="fdate"><div class="d">${fmtGBP(t.rev)}</div><div class="s">${t.qty} UNITS</div></div></div>`).join("")}
+  `);
+}
+
+/* ---------- product family drill-down ---------- */
+function famModal(f){
+  const d = FAMD[f]; if(!d) return;
+  openModal(`
+    <h2>${f} · ${fmtGBP(d.rev)} H1</h2>
+    <div class="msub">${d.units} UNITS · ${d.lines} INVOICE LINES · SOURCE: NETSUITE</div>
+    ${d.top.map(t=>`<div class="fitem" style="padding:10px 0"><div class="fbody"><div class="ft">${t.d}</div></div><div class="fdate"><div class="d">${fmtGBP(t.rev)}</div><div class="s">${t.qty} UNITS</div></div></div>`).join("")}
+    <div class="zoomhint" style="margin-top:16px">IN PRODUCTION: LINKS THROUGH TO THE PRODUCT KNOWLEDGEBASE — SPECS, IFU CLAIMS, POSITIONING</div>
+  `);
+}
+
+/* ---------- NPS drill-down ---------- */
+function npsModal(){
+  openModal(`
+    <h2>NPS +95 · every response this year</h2>
+    <div class="msub">20 RESPONSES · 19 PROMOTERS · 1 PASSIVE · 0 DETRACTORS · SOURCE: NETSUITE</div>
+    ${NPSL.map(n=>`<div class="fitem"><div class="fava ${n.score>=9?"sent":"mkt"}">${n.score}</div>
+      <div class="fbody"><div class="ft">${n.comment?'"'+n.comment+'"':"<i style=\'color:var(--dim)\'>Score only, no comment</i>"}</div>
+      <div class="fm">${n.score>=9?"PROMOTER":"PASSIVE"}</div></div>
+      <div class="fdate"><div class="d">${fmtDate(n.iso)}</div></div></div>`).join("")}
+  `);
+}
+
+/* ---------- activity feed ---------- */
+function feedHTML(filter, tall){
+  const items = FEED.filter(f=>filter==="all"||f.cat===filter);
+  return `<div class="feed ${tall?"tall":""}">${items.map(f=>`
+    <div class="fitem">
+      <div class="fava ${f.cat}">${f.who}</div>
+      <div class="fbody"><div class="ft">${f.text}</div><div class="fm">${f.meta}</div></div>
+      <div class="fdate"><div class="d">${fmtDate(f.iso)}</div><div class="s">${f.src.toUpperCase()}</div></div>
+    </div>`).join("")}</div>`;
+}
+function filterBar(target){
+  return `<div class="filterbar">${Object.keys(CATNAMES).map(c=>
+    `<span class="fpill ${feedFilter===c?"on":""}" onclick="setFeedFilter('${c}','${target}')">${CATNAMES[c]}</span>`).join("")}</div>`;
+}
+function setFeedFilter(c, target){
+  feedFilter = c;
+  const host = document.getElementById(target);
+  if(host) host.innerHTML = filterBar(target) + feedHTML(c, target==="feedmodalhost");
+}
+function feedModal(){
+  openModal(`
+    <h2>Hertfordshire · live activity</h2>
+    <div class="msub">EVERY SYSTEM, ONE FEED · CALLS, ORDERS, COMPLAINTS, NPS, ASSESSMENTS, WEBINARS</div>
+    <div id="feedmodalhost">${filterBar("feedmodalhost")}${feedHTML(feedFilter,true)}</div>
+  `);
+}
+
 /* ============ post-render effects ============ */
 function afterRender(id){
   // grow bars
@@ -942,3 +1117,4 @@ function afterRender(id){
 </script>
 </body>
 </html>
+
